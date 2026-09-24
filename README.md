@@ -1,81 +1,143 @@
 # Workforce Scheduling & Availability Analytics
 
-Power BI workforce analytics project that combines assigned shifts with employee availability submissions to measure staffing coverage, workload distribution, and schedule alignment.
+![Power BI](https://img.shields.io/badge/Power%20BI-Dashboard-F2C811?logo=powerbi&logoColor=black)
+![Power Query](https://img.shields.io/badge/Power%20Query-ETL-217346)
+![DAX](https://img.shields.io/badge/DAX-Data%20Modeling-2F80ED)
+![Data](https://img.shields.io/badge/Data-100%25%20Synthetic-16817A)
 
-> Portfolio note: the included Excel workbook is fully synthetic. It reproduces the project schema and business logic without using real employees, emails, dates, or operational records.
+An end-to-end Power BI solution that combines employee shift assignments with submitted availability to analyze staffing coverage, workload distribution, and scheduling alignment.
 
-## Business questions
+> **Privacy:** Every employee, email, date, and record included in this repository is synthetic. No operational or personally identifiable data is published.
 
-- How many shifts and working hours were scheduled?
-- How evenly was work distributed across employees and shift types?
-- How often did assignments match submitted availability?
-- Which employees or shift types had the most assignments outside availability?
-- How did staffing levels change by month and day of week?
-
-## Dashboard pages
+## Dashboard Preview
 
 ### Management Overview
 
-- Total hours, total shifts, employees with shifts
-- Average hours per employee and average shift length
-- Monthly hours trend
-- Shift volume by type
-- Employee workload comparison
+Executive-level view of scheduled hours, shift volume, workforce participation, monthly trends, shift-type distribution, and workload by employee.
+
+![Management Overview](screenshots/management-overview.png)
 
 ### Scheduling & Availability
 
-- Working days and availability-match KPIs
-- Scheduled employees by date and shift type
-- Average daily staffing by weekday
-- Availability options versus assigned shifts
-- Employee-level exceptions table
+Operational view of daily staffing, assignments within and outside submitted availability, weekday coverage, and employee-level scheduling exceptions.
 
-## Data model
+![Scheduling and Availability](screenshots/scheduling-availability.png)
 
-- `FactShifts`: one row per assigned employee shift
-- `FactAvailability`: one row per available employee/date/shift option
-- `DimEmployee`: employee master data
-- `DimDate`: generated calendar table
-- `DimShiftType`: normalized shift categories
+### Employee Analytics
 
-Recommended model relationships use one-to-many, single-direction filtering from each dimension to both fact tables.
+Interactive employee-level analysis with a member slicer, monthly working hours, shift distribution, monthly KPI table, and workload by weekday.
 
-## Key transformation work
+![Employee Analytics](screenshots/employee-analytics.png)
 
-- Combined monthly Microsoft Forms extracts
-- Standardized column names, dates, times, and shift labels
-- Unpivoted availability selections into a row-based fact table
-- Deduplicated repeated submissions
-- Created an employee mapping layer for inconsistent names
-- Built a composite match key using employee, date, and shift type
-- Excluded `Manager's Shift` from availability-match calculations because it has no comparable Forms option
+## Portfolio Dataset Results
 
-## Main result demonstrated by the project
+| KPI | Synthetic result |
+|---|---:|
+| Employees | 22 |
+| Total shifts | 590 |
+| Total hours | 2,688 |
+| Working days | 63 |
+| Average shift length | 4.56 hours |
+| Assignments within availability | 433 |
+| Assignments outside availability | 147 |
+| Availability match rate | 74.66% |
 
-The solution turns separate scheduling and Forms files into a reusable Power BI model that identifies assignments within and outside employee availability, while also providing management-level workload and staffing views.
+## Business Questions Answered
 
-## Repository contents
+- How many shifts and working hours were scheduled?
+- How evenly was work distributed across employees and shift types?
+- How often did assignments match employee availability?
+- Which employees had the highest number of scheduling exceptions?
+- How did staffing and workload change by month, weekday, and shift type?
+- What does an individual employee's work pattern look like?
+
+## Solution Architecture
+
+```mermaid
+flowchart LR
+    A[Shift assignments] --> C[Power Query]
+    B[Availability submissions] --> C
+    C --> D[Star schema]
+    D --> E[DAX measures]
+    E --> F[Power BI dashboards]
+```
+
+## Data Model
+
+| Table | Role |
+|---|---|
+| `FactShifts` | One row per assigned employee shift |
+| `FactAvailability` | One row per available employee/date/shift option |
+| `DimEmployee` | Standardized employee lookup |
+| `DimDate` | Calendar, month, and weekday attributes |
+| `DimShiftType` | Normalized shift categories |
+
+Dimensions filter the fact tables through one-to-many, single-direction relationships.
+
+## Data Preparation
+
+Power Query was used to:
+
+- Combine monthly availability extracts.
+- Standardize employee names, dates, times, and shift labels.
+- Unpivot availability selections into an analysis-ready fact table.
+- Remove blank and duplicate submissions.
+- Resolve inconsistent employee-name variants through a mapping layer.
+- Build a composite employee-date-shift key.
+- Classify each comparable assignment as within or outside availability.
+- Exclude `Manager's Shift` from availability matching because no equivalent availability option exists.
+
+## Selected DAX Measures
+
+```DAX
+Total Hours =
+SUM(FactShifts[HoursWorked])
+
+Assignments Outside Availability =
+CALCULATE(
+    [Total Shifts],
+    FactShifts[AvailabilityStatus] = "Outside Availability"
+)
+
+Availability Match % =
+DIVIDE(
+    [Assignments Within Availability],
+    [Comparable Assignments]
+)
+```
+
+The complete measure definitions are available in [`documentation/DAX_Measures.md`](documentation/DAX_Measures.md).
+
+## Repository Structure
 
 ```text
+Workforce_Analytics_Portfolio.pbix
+README.md
+CV_Bullet.txt
 sample_data/
   Workforce_Analytics_Synthetic_Data.xlsx
 documentation/
   DAX_Measures.md
   Power_Query_Transformations.md
 screenshots/
-  ADD_SCREENSHOTS.md
-CV_Bullet.txt
+  management-overview.png
+  scheduling-availability.png
+  employee-analytics.png
 ```
 
-## Recreate the report
+## Recreate the Dashboard
 
-1. Load the three data sheets from the synthetic workbook.
-2. Create `DimDate` and `DimShiftType` using the examples in the documentation folder.
-3. Create the relationships described above.
-4. Add the documented DAX measures.
-5. Build the two report pages using the dashboard-page descriptions.
+1. Download the synthetic workbook from `sample_data`.
+2. Load `FactShifts`, `FactAvailability`, and `DimEmployee` into Power BI.
+3. Create `DimDate` and `DimShiftType` using the documented examples.
+4. Create the star-schema relationships.
+5. Add the documented DAX measures.
+6. Rebuild or customize the three report pages shown above.
 
-## Tools
+## Skills Demonstrated
 
-Power BI Desktop, Power Query, DAX, Microsoft Forms, Excel
+`Power BI` · `Power Query` · `DAX` · `Data Cleaning` · `Data Modeling` · `ETL` · `Dashboard Design` · `Workforce Analytics` · `Business Intelligence`
 
+## Project Context
+
+This project demonstrates how separate scheduling and availability sources can be transformed into a reusable analytical model. It highlights management-level workforce trends and actionable scheduling exceptions while protecting the underlying operational data.
