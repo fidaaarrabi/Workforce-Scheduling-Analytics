@@ -15,19 +15,19 @@ An end-to-end Power BI solution that combines employee shift assignments with su
 
 Executive-level view of scheduled hours, shift volume, workforce participation, monthly trends, shift-type distribution, and workload by employee.
 
-![Management Overview](screenshots/management-overview.png)
+![Management Overview](screenshots/ManagementOverview.png)
 
 ### Scheduling & Availability
 
 Operational view of daily staffing, assignments within and outside submitted availability, weekday coverage, and employee-level scheduling exceptions.
 
-![Scheduling and Availability](screenshots/scheduling-availability.png)
+![Scheduling and Availability](screenshots/SchedulingAvailability.png)
 
 ### Employee Analytics
 
 Interactive employee-level analysis with a member slicer, monthly working hours, shift distribution, monthly KPI table, and workload by weekday.
 
-![Employee Analytics](screenshots/employee-analytics.png)
+![Employee Analytics](screenshots/EmployeeAnalytics.png)
 
 ## Portfolio Dataset Results
 
