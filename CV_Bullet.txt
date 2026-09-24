@@ -1,0 +1,2 @@
+Built a Power BI workforce scheduling dashboard by integrating shift exports with Microsoft Forms availability data; designed a star schema, automated Power Query cleaning and matching logic, and created DAX KPIs to analyze workload, staffing trends, and assignments outside employee availability.
+
